@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- 1. Load webcomponents.min.js for polyfill support. -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-cappable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/bower_components/webcomponentsjs/webcomponents.js"></script>
+
+    <!-- 2. Use an HTML Import to bring in the element. -->
+    <link rel="import" href="elements/elements.html">
+    <link rel="stylesheet" href="/stylesheets/app.css">
+    <link type="text/css" rel="stylesheet" href="/stylesheets/home.css" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/list_view.css" />
+    <link rel="manifest" href="/scripts/manifest.json">
+    <link rel="shortcut icon" href="favicon.ico">
+    <style>
+      core-toolbar{
+        background-color: {% if listToView.listType == 'games' %}#b3c833{% elif listToView.listType == 'books'%}#03A9F4{% else %}#ce5043{% endif %};
+      }
+    </style>
+  </head>
+  <body fullbleed layout vertical>
+    <!-- 3. Declare the element. Configure using its attributes.
+    Replace '//example.com/json' with valid json file -->
+    <core-drawer-panel id="drawerPanel" class="core-transition" style="display:none">
+      <core-header-panel drawer> 
+        <core-toolbar>Menu</core-toolbar>
+        <core-menu>
+          <core-item label="One"></core-item>
+          <core-item label="Two"></core-item>
+        </core-menu>
+      </core-header-panel>
+      <core-scroll-header-panel main >
+        <core-toolbar class="medium">
+          <paper-icon-button core-drawer-toggle icon="menu"></paper-icon-button>
+          <paper-icon-button class="back_button" icon="arrow-back"></paper-icon-button>
+          <div class="title"><core-icon icon={% if listToView.listType == 'games' %}"av:games"{% elif listToView.listType == 'books'%}"book"{% else %}"maps:local-movies"{% endif %}></core-icon> {{ listToView.title }}</div>
+          <span flex></span>
+          <paper-icon-button class="add_list" icon="add"></paper-icon-button>
+        </core-toolbar>
+          <p class="hidden_p list_id">{{ listToView.key().id() }}</p>
+          
+          <core-animated-pages transitions="slide-from-right" class="main_pages" style='height:100%'>
+            <selection>
+              <div class="content core-transition">
+              <div class="{{ listToView.title.replace(" ","") }} list_container home">
+                {% for li in listToView.listItems %}
+                  <paper-shadow z="1" class="list_item" onclick="viewItem(event, this, '{{ listToView.listType }}')">
+                      <p class="hidden_p item_id">{{ db.get(li).key().id() }}</p>
+                      <div class="art_container">
+                        <span class="buffer"></span>
+                        <img class="art" src="{{ db.get(li).imageUrl }}">
+                      </div>
+                      <div class="list_item_info">
+                      <p class="item_title">{{ db.get(li).title }}</p>
+                      {% if listToView.listType != 'movies' %}
+                      <p class="item_dates">Start: {{ db.get(li).startDate }}<br/>Finish: {{ db.get(li).finishDate }}</p>
+                      {% else %}
+                      <p class="item_dates">Watched: {{ db.get(li).dateWatched }}</p>
+                      {% endif %}
+                      </div>
+                      <!--<p>{{ db.get(li).description }}</p>-->
+                    
+                  </paper-shadow>
+                {% endfor %}
+              </div>
+              
+                
+                
+            </div>
+          </selection>
+          <selection class="viewitem">
+          </selection>
+          <selection style='height:100%'>
+            <div class="loading_container"  style="position: fixed; top: 30%; width:100%" horizontal center-justified layout>
+              <paper-spinner></paper-spinner>
+            </div>
+            <div class="add_list_narrow core-transition" id="add_list_narrow" transition="core-transition-center" style='height:100%'>
+              <core-animated-pages transitions="cross-fade-all" class='search_animated' style='height:100%'> 
+                <selection style='height:100%' vertical layout>
+                  <div class="search_item_dialog core-transition">
+                    <h1>Search for {% if listToView.listType == 'games' %}Game{% elif listToView.listType == 'books'%}Book{% else %}Movie{% endif %}</h1>
+                      <paper-input-decorator error="Please enter a List Name" label="{% if listToView.listType == 'games' %}Game{% elif listToView.listType == 'books'%}Book{% else %}Movie{% endif %} Title" floatingLabel>
+                          <input is="core-input" required class="search_title">
+                      </paper-input-decorator>
+                      <paper-button autofocus role="button" class="search_item" onclick="findItem(this, '{{ listToView.listType }}')">Search</paper-button>
+                      </div>
+                      <div class="loading_container" horizontal center-justified layout>
+                        <paper-spinner></paper-spinner>
+                      </div>
+                      <core-animated-pages selected="{% raw %}{{selected}}{% endraw %}">
+                <section id="page1">
+                  <div hero-id="hero" hero style="width:50px; height:50px; background-color:blue;"></div>
+                </section>
+                <section id="page2">
+                  <div id="foo" hero-id="hero" hero?="{% raw %}{{selected === 1 || selected === 0}}{% endraw %}" cross-fade="{% raw %}{{selected === 2}}{% endraw %}" style="width:50px; height:50px; background-color:green;"></div>
+                </section>
+                <section id="page3">
+                </section>
+              </core-animated-pages>
+                      <div id="results" class="results core-transition" style='overflow:hidden;' flex vertical layout></div>
+                </selection>
+                <selection>
+                  <style>
+                    .art_shadow{
+                      float:none;
+                    }
+                  </style>
+                  <div class="addNew_narrow" style="margin: 10px 0;">
+
+                        <paper-shadow z='1' style="display:inline-block;" class='art_shadow'>
+                          <div class="art_container" vertical center-justified layout>
+                                <img class="add art">
+                          </div>
+                        </paper-shadow>
+                        <paper-input-decorator label="Image Url" class="add_image_decorator" floatingLabel>
+                          <textarea class="add_image_url autogrow"></textarea>
+                        </paper-input-decorator>
+                        <br/>
+                    
+                        <paper-input-decorator label="Title" class='add_title_decorator' floatingLabel>
+                          <textarea class='add_title autogrow' onkeyup='textAreaAdjust(this)' style="overflow:hidden"></textarea>
+                        </paper-input-decorator>
+                        <br/>
+                        {% if listToView.listType == 'books' %}
+                        <paper-input-decorator label="Author" class="add_author_decorator" floatingLabel>
+                          <textarea class='add_author autogrow' onkeyup='textAreaAdjust(this)' style="overflow:hidden"></textarea>
+                        </paper-input-decorator>
+                        <br/>
+                        {% endif %}
+                        {% if listToView.listType == 'games' %}
+                        <paper-input label="Platform" class="add_platform" floatingLabel>
+                        </paper-input>
+                        <br/>
+                        {% endif %}
+                        <paper-input-decorator label="Start Date" class='add_start_date_decorator' floatingLabel labelVisible>
+                          <input type="date" is='core-input' class='add_start_date' value="2015-01-26">
+                        </paper-input-decorator>
+                        <br/>
+                        <paper-input-decorator label="End Date" class='add_end_date_decorator' floatingLabel labelVisable>
+                          <input type="date" is='core-input' class='add_end_date'>
+                        </paper-input-decorator>
+                      
+                      
+                        <paper-input label="Release Date" class="add_release_date" floatingLabel>
+                        </paper-input>
+                        <br/>
+                        <paper-input label="Publisher" class="add_publisher" floatingLabel>
+                        </paper-input>
+                        <br/>
+                        {% if listToView.listType == 'games' %}
+                        <paper-input label="Developer" class="add_developer" floatingLabel style="width:100%">
+                        </paper-input>
+                        {% endif %}
+                        <input class="add_id hidden_p">
+                      
+                   
+                    <br/>
+                    
+                      
+                      <paper-input-decorator floatingLabel label="Description" class="add_description_decorator">
+                        <textarea class="add_description" style="height: 100px"></textarea>
+                      </paper-input-decorator>
+                      <paper-button autofocus role="button" class="add_item" onclick="putItem(this, '{{ listToView.listType }}', '{{ listToView.key().id() }}')">Add</paper-button>
+                    
+                  </div>
+                </selection>
+              </core-animated-pages>
+              
+                
+            </div>
+          </selection>
+          
+        </core-animated-pages>
+        <paper-action-dialog id="add_item_dialog" transition="core-transition-center" style="width: 50%; height: 700px; overflow:hidden; ">
+                <core-animated-pages transitions="cross-fade-all" class='search_animated'>
+                  <selection style='height:600px; overflow:hidden;'vertical layout>
+                    <div class="search_item_dialog core-transition">
+                      <h2 style="margin: 10px 0">Search for {% if listToView.listType == 'games' %}Game{% elif listToView.listType == 'books'%}Book{% else %}Movie{% endif %}</h2>
+                      <paper-input-decorator label="{% if listToView.listType == 'games' %}Game{% elif listToView.listType == 'books'%}Book{% else %}Movie{% endif %} Title" floatingLabel>
+                          <input is="core-input" class="search_title">
+                      </paper-input-decorator>
+                      <paper-button autofocus role="button" class="search_item" onclick="findItem(this, '{{ listToView.listType }}')">Search</paper-button>
+                    </div>
+                    <div class="loading_container" horizontal center-justified layout>
+                      <paper-spinner></paper-spinner>
+                    </div>
+                    
+                    <div id="results" class="results core-transition" flex style='overflow: hidden'>
+                    </div>
+                  </selection>
+                  <selection class='poop'>
+                    <style>
+                      .art_container {
+                        width:160px;
+                        height:245px;
+                        background-color: #e5e5e5;
+                      }
+                      .art_shadow{
+                        display: inline-block;
+                        float: left;
+                        margin-right: 15px;
+                      }
+                      .add_image_url{
+                        display: inline-block;
+                      }
+                      .add_start_date_decorator{
+                        margin-top: 25px; 
+                      }
+
+
+                    </style>
+                    <div class="addNew_narrow" style="margin: 10px 0;">
+                      
+                          
+                          <paper-shadow z='1' class='art_shadow'>
+                          <div class="art_container" vertical center-justified layout>
+                                <img class="add art">
+                          </div>
+                        </paper-shadow>
+                        <paper-input-decorator label="Image Url" class="add_image_decorator" floatingLabel>
+                          <textarea class="add_image_url autogrow"></textarea>
+                        </paper-input-decorator>
+                        <br/>
+                    
+                        <paper-input-decorator label="Title" class='add_title_decorator' floatingLabel>
+                          <textarea class='add_title autogrow' onkeyup='textAreaAdjust(this)' style="overflow:hidden"></textarea>
+                        </paper-input-decorator>
+                        <br/>
+                        {% if listToView.listType == 'books' %}
+                        <paper-input-decorator label="Author" class="add_author_decorator" floatingLabel>
+                          <textarea class='add_author autogrow' onkeyup='textAreaAdjust(this)' style="overflow:hidden"></textarea>
+                        </paper-input-decorator>
+                        <br/>
+                        {% endif %}
+                        {% if listToView.listType == 'games' %}
+                        <paper-input label="Platform" class="add_platform" floatingLabel>
+                        </paper-input>
+                        <br/>
+                        {% endif %}
+                        <paper-input-decorator label="Start Date" class='add_start_date_decorator' floatingLabel labelVisible>
+                          <input type="date" is='core-input' class='add_start_date' value="2015-01-26">
+                        </paper-input-decorator>
+                        <br/>
+                        <paper-input-decorator label="End Date" class='add_end_date_decorator' floatingLabel labelVisable>
+                          <input type="date" is='core-input' class='add_end_date'>
+                        </paper-input-decorator>
+                      
+                      
+                        <paper-input label="Release Date" class="add_release_date" floatingLabel>
+                        </paper-input>
+                        <br/>
+                        <paper-input label="Publisher" class="add_publisher" floatingLabel>
+                        </paper-input>
+                        <br/>
+                        {% if listToView.listType == 'games' %}
+                        <paper-input label="Developer" class="add_developer" floatingLabel style="width:100%">
+                        </paper-input>
+                        {% endif %}
+                        <input class="add_id hidden_p">
+                      
+                   
+                    <br/>
+                    
+                      
+                      <paper-input-decorator floatingLabel label="Description" class="add_description_decorator">
+                        <textarea class="add_description" style="height: 100px"></textarea>
+                      </paper-input-decorator>
+                      <p class='hidden_p sib_button'></p> 
+                      <paper-button  autofocus role="button" class="add_item" onclick="putItem(this, '{{ listToView.listType }}', '{{ listToView.key().id() }}')">Add</paper-button>
+                    </div>
+                </selection>
+              </core-animated-pages>
+                    <paper-button dismissive role="button">Cancel</paper-button>
+                    
+                  </paper-action-dialog>
+        <paper-action-dialog id="finish_item_dialog" transition="core-transition-center" closeSelector='[dismissive]'>
+          <p class='finish_id' style="display:none;"></p>
+          <paper-input-decorator label="Finished Date" class='add_end_date_decorator' floatingLabel labelVisable>
+            <input type="date" is='core-input' class='finish_end_date'>
+          </paper-input-decorator>
+          <paper-button dismissive role="button">Cancel</paper-button>
+          <paper-button affirmative autofocus role="button">Finish</paper-button>
+        </paper-action-dialog>
+      </core-header-panel>
+    </core-drawer-panel>
+    <script src="/scripts/color-thief.js"></script>
+    <script src="/scripts/list_view.js"></script>
+    <div class="loading_container" id="full_loading" style="display:none; position: fixed; top: 40%; width:100%; left:0" horizontal center-justified layout>
+        <paper-spinner></paper-spinner>
+    </div>
+  </body>
+</html>

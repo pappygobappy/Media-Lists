@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<html>
+  <!-- [START head_html] -->
+  <head>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/main.css" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/listview.css" />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/small.css" />
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+      
+      $("#overlay").click(function(e){
+        if(e.target == this){
+          $('#overlay').fadeOut('fast')
+          $('#add').fadeOut('fast')
+          $('#view_item').fadeOut('fast')
+        }
+      })
+
+    });
+
+    function addItem(){
+        $('#overlay').fadeIn('fast')
+        $('.spinner').fadeIn('fast')
+        $.ajax({
+          type: "POST",
+          url: "/addNewItem",
+          data: { Title: $("#title").val(),
+                  Platform: $("#platform").val(),
+                  StartDate: $("#start").val(),
+                  EndDate: $("#end").val(),
+                  list_type: '{{ listToView.listType }}',
+                },
+          success: function(html){
+            //$( "#add" ).html( html );
+            $("body").css("overflow", "hidden")
+            $('.spinner').fadeOut('fast')
+            setTimeout(function(){$('#add').fadeIn('fast')},200)
+            //$('#overlay').css('visibility', 'visible')
+          }
+        })
+    }
+    
+    function findItem(){
+      find_url = '/find'
+        listType = '{{ listToView.listType }}'
+        if (listType == 'games'){
+          find_url += "Game"
+        }
+        else if (listType == 'books'){
+          find_url += "Book"
+        }
+        else{
+          find_url += "Movie"
+        }
+        $('body').css('overflow-y','hidden');
+        $.ajax({
+          type: "POST",
+          url: find_url,
+          data: { Title: $(".add_title").val(),
+                  Platform: $(".add_platform").val(),
+                  Author: $(".add_author").val(),
+                  StartDate: $(".add_start_date").val(),
+                  EndDate: $(".add_end_date").val(),
+                  list_type: '{{ listToView.listType }}',
+                },
+          success: function(html){
+            $( "#results" ).html( html );
+            $('.spinner').fadeOut('fast')
+            setTimeout(function(){$('#results').fadeIn('fast')},200)
+            $("body").css("overflow", "hidden")
+            //$('#overlay').css('visibility', 'visible')
+          }
+        })
+    }
+
+    function editItem(e){
+      
+      $(".edit_title").val($(e).parent().siblings('.title_info').find(".view_title").text())
+      $(".edit_platform").val($(e).parent().siblings('.title_info').find(".view_platform").text() || "")
+      $(".edit_release_date").val($(e).siblings('.sub_info').find(".view_release_date").text())
+      $(".edit_publisher").val($(e).siblings('.sub_info').find(".view_publisher").text())
+      $(".edit_description").val($(e).parent().find(".view_description").text())
+      $(".edit_image_url").val($(e).parent().parent().siblings(".view_art_container").find(".view_art").attr("src"))
+      {% if listToView.listType == "games"%}
+      $(".edit_developer").val($(e).siblings('.sub_info').find(".view_developer").text() || "")
+      {% endif %}
+      {% if listToView.listType == "books"%}
+      $(".edit_author").val($(e).parent().find(".view_author").text())
+      {% endif %}
+      $(".edit_id").val($(e).parent().parent().find(".item_id").text())
+      $("#view_item").fadeOut('fast')
+      $("#edit_item").fadeIn('fast')
+    }
+
+    function getItemDetails(e){
+      $(".add_title").val($(e).find(".find_title").text())
+      $(".add_platform").val($(e).find(".find_platform").text())
+      $(".add_release_date").val($(e).find(".find_release_date").text())
+      $(".add_publisher").val($(e).find(".find_publisher").text())
+      $(".add_description").val($(e).find(".find_description").text())
+      $(".add_image_url").val($(e).find(".art").attr("src"))
+      {% if listToView.listType == "games"%}
+      $(".add_developer").val($(e).find(".find_developer").text())
+      {% endif %}
+      {% if listToView.listType == "books"%}
+      $(".add_author").val($(e).find(".find_author").text())
+      {% endif %}
+      $(".add_id").val($(e).find(".item_id").text())
+    }
+
+    function putItem(){
+        $('#results').fadeOut('fast')
+        setTimeout(function(){$('.spinner').fadeIn('fast')},200)
+        put_url = '/put'
+        listType = '{{ listToView.listType }}'
+        if (listType == 'games'){
+          put_url += "Game"
+        }
+        else if (listType == 'books'){
+          put_url += "Book"
+        }
+        else{
+          put_url += "Movie"
+        }
+        $.ajax({
+          type: "POST",
+          url: put_url,
+          data: { ListID: '{{ listToView.key().id()}}',
+                  Title: $(".add_title").val(),
+                  Platform: $(".add_platform").val(),
+                  Author: $(".add_author").val(),
+                  Publisher: $(".add_publisher").val(),
+                  ReleaseDate: $(".add_release_date").val(),
+                  Developer: $(".add_developer").val(),
+                  Description: $(".add_description").val(),
+                  ImageUrl: $(".add_image_url").val(),
+                  StartDate: $(".add_start_date").val(),
+                  EndDate: $(".add_end_date").val(),
+                  id: $(".add_id").val()
+                },
+          success: function(html){
+            setTimeout(1000)
+            location.reload();
+          }
+        })
+    }
+    function viewItem(e, t){
+      alert($(t).children(".item_id").text() + ($(e.target).attr('class')))
+      if($(e.target).attr('class') == 'art'){
+        //$('body').css('overflow-y','hidden');
+        $('#overlay').fadeIn('fast')
+        $('.spinner').fadeIn('fast')
+        view_url = '/view'
+        listType = '{{ listToView.listType }}'
+        if (listType == 'games'){
+          view_url += "Game"
+        }
+        else if (listType == 'books'){
+          view_url += "Book"
+        }
+        else{
+          view_url += "Movie"
+        }
+        $.ajax({
+          type: "GET",
+          url: view_url+"?itemID="+$(t).children(".item_id").text(),
+          success: function(html){
+            $("body").css("overflow", "hidden")
+            $( "#view_item" ).html( html );
+            $('.spinner').fadeOut('fast')
+            setTimeout(function(){$('#view_item').fadeIn('fast')},200)
+            
+            //$('#overlay').css('visibility', 'visible')
+          }
+        })
+      }
+    }
+    function completeItem( e ){
+        alert($(e).siblings('.item_id').text())
+        complete_url = "/complete"
+        listType = '{{ listToView.listType }}'
+        if (listType == 'games'){
+          complete_url += "Game"
+        }
+        else if (listType == 'books'){
+          complete_url += "Book"
+        }
+        else{
+          complete_url += "Movie"
+        }
+        $.ajax({
+          type: "POST",
+          url: complete_url,
+          data: { ItemID: $(e).parent().parent().siblings('.item_id').text(),
+          },
+          success: function(html){
+            setTimeout(1000)
+            location.reload();
+          }
+        })
+      }
+    function closeModal(){
+      $("body").css("overflow", "auto")
+      $('#overlay').fadeOut('fast')
+      $('#add').fadeOut('fast')
+      $('#view_item').fadeOut('fast')
+    }
+    </script>
+  </head>
+  <!-- [END head_html] -->
+  <body>
+    <h1>{{ listToView.title }}</h1>
+    <h2>Started: {{ startCount }}</h2>
+    <h2>Finished: {{ finishedCount }}</h2>
+    <h2>Total Played: {{ totalPlayed }}</h2>
+      <h2>Started</h2>
+      <div class="div_hide_scroll">
+        <div class="started list_container">
+        {% for li in listToView.listItems %}
+          {% if db.get(li).finishDate == '' %}
+          <div class="list_item" onclick="viewItem(event, this)">
+            <p class="item_id">{{ db.get(li).key().id() }}</p>
+            <div class="art_container">
+              <img class="art" src="{{ db.get(li).imageUrl }}">
+            </div>
+            <div class="list_item_info">
+            <p class="item_title">{{ db.get(li).title }}</p>
+            <p class="item_dates">Start: {{ db.get(li).startDate }}<br/>Finish: {{ db.get(li).finishDate }}</p>
+            </div>
+            <!--<p>{{ db.get(li).description }}</p>-->
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <h2>Finished</h2>
+    <div class="div_hide_scroll">
+      <div class="finished list_container">
+        {% for li in listToView.listItems %}
+          {% if db.get(li).finishDate != '' %}
+          <div class="list_item" onclick="viewItem(event, this)">
+            <p class="item_id">{{ db.get(li).key().id() }}</p>
+            <div class="art_container">
+              <img class="art" src="{{ db.get(li).imageUrl }}">
+            </div>
+            <div class="list_item_info">
+            <p class="item_title">{{ db.get(li).title }}</p>
+            <p class="item_dates">Start: {{ db.get(li).startDate }}<br/>Finish: {{ db.get(li).finishDate }}</p>
+            </div>
+            <!--<p>{{ db.get(li).description }}</p>-->
+          </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <p>{{ game_id }}</p>
+    <p>{{ game_url }}</p>
+    {% if listToView.listType == 'games' %}
+    <form action="/putGame?list_title={{ listToView.title }}" method="post">Game:
+    {% endif %}
+      <br/>
+      <label>Title:</label>
+      <input id='title' name="Title">
+      <br/>
+      {% if listToView.listType == 'games' %}
+        <label>Platform:</label>
+        <input id='platform' name="Platform">
+        <br/>
+        <label>Start Date</label>
+        <input id='start' name="Start Date">
+        <br/>
+        <label>Finish Date</label>
+        <input id='end' name="End Date">
+        <br/>
+      {% endif %}
+      <input type="submit" value="add">
+    </form>
+    <button id="test" onclick="addItem()">Add New Item</button>
+    <div id="overlay">
+      <div id="add" class="modal">
+        <span class="back_button" onclick="closeModal()">&#9664;</span>
+        <div class="addNew modal">
+          <div style="width:100%; display:block;">
+            <div class="add_left">
+              <label>Title</label>
+              <input class="add_title">
+              <br/>
+              {% if listToView.listType == 'books' %}
+              <label>Author</label>
+              <input class="add_author">
+              <br/>
+              {% endif %}
+              {% if listToView.listType == 'games' %}
+              <label>Platform</label>
+              <input class="add_platform">
+              <br/>
+              {% endif %}
+              <label>Start Date</label>
+              <input type="date" class="add_start_date">
+              <br/>
+              <label>End Date</label>
+              <input type="date" class="add_end_date">
+            </div>
+            <div class="add_right">
+              <label>Release Date</label>
+              <input class="add_release_date">
+              <br/>
+              <label>Publisher</label>
+              <input class="add_publisher">
+              <br/>
+              {% if listToView.listType == 'games' %}
+              <label>Developer</label>
+              <input class="add_developer">
+              {% endif %}
+              <input class="add_id hidden_p">
+            </div>
+          </div>
+          <br/>
+          <div class="des_con">
+            <label>Image Url</label>
+            <input class="add_image_url">
+            <br/>
+            <label>Description</label>
+            <textarea class="add_description"></textarea>
+          </div>
+          <div onclick="findItem()">Search</div>
+          <div onclick="putItem()">Submit</div>
+          <div id="results"></div>
+        </div>
+      </div>
+      <div id="view_item"></div>
+      <div id="edit_item">
+        <div class="edit modal">
+          <p class="hidden_p item_id"></p>
+          <div style="width:100%; display:block;">
+            <div class="add_left">
+              <label>Title</label>
+              <input class="edit_title">
+              <br/>
+              {% if listToView.listType == 'books' %}
+              <label>Author</label>
+              <input class="edit_author">
+              <br/>
+              {% endif %}
+              {% if listToView.listType == 'games' %}
+              <label>Platform</label>
+              <input class="edit_platform">
+              <br/>
+              {% endif %}
+              <label>Start Date</label>
+              <input type="date" class="edit_start_date">
+              <br/>
+              <label>End Date</label>
+              <input type="date" class="edit_end_date">
+            </div>
+            <div class="add_right">
+              <label>Release Date</label>
+              <input class="edit_release_date">
+              <br/>
+              <label>Publisher</label>
+              <input class="edit_publisher">
+              <br/>
+              {% if listToView.listType == 'games' %}
+              <label>Developer</label>
+              <input class="edit_developer">
+              {% endif %}
+            </div>
+          </div>
+          <br/>
+          <div class="des_con">
+            <label>Image Url</label>
+            <input class="edit_image_url">
+            <br/>
+            <label>Description</label>
+            <textarea class="edit_description"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="spinner">
+        <div class="dot1"></div>
+        <div class="dot2"></div>
+      </div>
+    </div>
+  </body>
+</html>
+{% endautoescape %}

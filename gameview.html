@@ -1,0 +1,43 @@
+<div class="view modal">
+	<div class="view_art_container_small">
+		<div class="view_art_background" style="background-image: url('{{ game.imageUrl }}');"></div>
+	</div>
+	<p class="hidden_p item_id">{{ game.key().id() }}</p>
+	<div class="view_info">
+		<div class="title_info">
+			<span class="back_button" onclick="closeModal()">&#9664;</span>
+			<h1 class="view_title">{{ game.title }}</h1>
+			<h1 class="view_platform subHeading">{{ game.platform }}</h1>
+		</div>
+		<div class="view_bottom">
+			<div class="sub_info">
+				<h2 class="view_label subHeading">Start: </h2>
+				<h2 class="view_start_date view_label ">{{ game.startDate }}</h2>
+				<br/>
+				<h2 class="view_label subHeading">Finish: </h2>
+				<h2 class="view_finish_date view_label">{{ game.finishDate }}</h2>
+				<br/>
+				<h2 class="view_label subHeading">Release Date: </h2>
+				<h2 class="view_release_date view_label">{{ game.releaseDate }}</h2>
+				<br/>
+				<h2 class="view_label subHeading">Publisher: </h2>
+				<h2 class="view_publisher view_label">{{ game.publisher }}</h2>
+				<br/>
+				<h2 class="view_label subHeading">Developer: </h2>
+				<h2 class="view_developer view_label">{{ game.developer }}</h2>
+				<p class="view_description">{{ game.description|safe }}</p>
+			</div>
+			{% if game.finishDate == '' %}
+		  	<div class='finish_button' onclick='completeItem(this)'>
+		    	<p class='finish_button'>Finish</p>
+		  	</div>
+		  	{% endif %}
+		  	<div class='edit_button' onclick="editItem(this)">
+		  		<p class='edit_button'>Edit Info</p>
+		  	</div>
+		</div>
+	</div>
+	<div class="view_art_container">
+		<img class="view_art" src="{{ game.imageUrl }}">
+	</div>
+</div>

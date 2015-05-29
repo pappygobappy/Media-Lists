@@ -1,0 +1,268 @@
+@media (max-width: 600px){
+
+	.click_div{
+		width: 130px;
+		height: 240px;
+		padding-left: 10px;
+		padding-right: 10px;
+		padding-top: 10px;
+		overflow: hidden;
+		float: none;
+		position: relative;
+		display:inline-block;
+		white-space:normal;
+	}
+
+	.click_div p{
+		font-size: 80%;
+		margin-bottom: -15px;
+	}
+
+	.choice_art_container {
+		width:125px;
+		height:200px;
+		border: none;
+	}
+	.art_container {
+		width: 100%;
+		height:225px;
+		margin-top: -40px;
+		position: relative;
+	}
+
+	.list_item{
+		height: 225px;
+		width: 150px;
+		position: relative;
+		display:inline-block;
+		white-space:normal;
+		
+	}
+
+	.list_container{
+		display: inline-block;
+		white-space:nowrap;
+		overflow-x: auto;
+		height:250px;
+	}
+	.div_hide_scroll{
+		margin-top: -30px;
+		overflow: hidden;
+		height:275px;
+	}
+
+	.item_dates{
+		display: none;
+	}
+
+	.list_item_info{
+		display:inline-block;
+		width:100%;
+		height: 25px;
+		padding-top: 0px;
+		overflow: hidden;
+		background-color: rgba(0,0,0,0.7);
+		position: absolute;
+		bottom: -11px;
+	}
+	.item_title{
+		position: absolute;
+		top:-12px;
+	}
+
+	.art_container {
+		width:100%;
+		height:100%;
+	}
+
+
+
+	#view_item{
+		width: 100%;
+		height:100%;
+		margin: 0 0;
+		position: fixed;
+		top:0;
+		background-color: #000;
+		overflow-x: hidden;
+	}
+
+	.back_button{
+		display: inline-block;
+		color: #fff;
+		cursor: pointer;
+		font-size: 200%;
+	}
+
+	.back_button:active{
+		color: #1f1f1f;
+	}
+
+	.view_art_container_small{
+		display: block;
+		position: fixed;
+		top: 0;
+		right:0;
+		bottom: 0;
+		left: -15px;
+	}
+	.view_art_background{
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		background-position: center;
+		background-size: cover;
+	}
+
+	.view_bottom{
+		min-height: 0;
+		background-color: transparent;
+		margin: 0 0;
+		padding-bottom: 15px;
+		height:100%;
+	}
+
+	.view_art_container{
+		display:none;
+	}
+
+	.view_art{
+		margin-top: 20px;
+	}
+
+	.view{
+		height:100%;
+		width:100%;
+		border: none;
+		position: fixed;
+		top:0;
+		border-radius: 0px;
+		padding: 0 0;
+		
+	}
+
+	#overlay{
+		height:101%;
+		padding-bottom: 1%;
+	}
+
+	.view_info{
+		text-shadow: 0 0 5px #000;
+		height:100%;
+		width:100%;
+		background-color: rgba(0,0,0,.7);
+		position: fixed;
+		overflow-x:hidden;
+		top: 0;
+		left: 0;
+		overflow-y: auto;
+	}
+
+	.title_info{
+		margin: 0 0;
+		padding: 0 0 0 0px;
+		padding-left: 15px;
+		text-align: left;
+		font-size: 90%;
+	}
+
+	.sub_info{
+		padding: 0 0 0 0px;
+		padding-left: 15px;
+		padding-right: 15px;
+		font-size: 85%;
+		height:100%;
+	}
+
+	div.finish_button{
+		display: block;
+		bottom: -50px;
+	}
+
+	#add{
+		width: 100%;
+		height:100%;
+		margin: 0 0;
+		padding:0;
+		position: fixed;
+		top:0;
+		overflow-x: hidden;
+	}
+
+	#results{
+		display: inline-block;
+		width:100%;
+		white-space:nowrap;
+		overflow-x: auto;
+		padding: 0;
+	}
+
+	.addNew{
+		height:100%;
+		width:100%;
+		border: none;
+		border-radius: 0px;
+		padding: 0 0;
+		overflow-y:auto;
+	}
+
+	.add_left{
+		float: left;
+		width: 50%;
+		display: inline-block;
+	}
+
+	.add_right{
+		float: right;
+		width: 50%;
+		display: inline-block;
+	}
+
+	textarea{
+		width: 75%;
+		height: 50px;
+		padding: 0.4em 0.6em;
+		margin-bottom: 5px;
+		border: 1px solid #bbb;
+		border-radius: 5px;
+		background-color: #eee;
+	}
+
+	input {
+		border: 1px solid #bbb;
+		border-radius: 5px;
+		display: inline-block;
+		font-family: "Helvetica Neue", sans-serif;
+		font-size: 90%;
+		color: #222222;
+		background-color: #eee;
+		padding: 0.4em 0.6em;
+		margin-bottom: 5px;
+		width:75%;
+	}
+	label{
+		display: inline-block;
+		width: 106px;
+	}
+
+	input:focus {
+		box-shadow: 0 1px 0 #2392F3 inset, 0 -1px 0 #2392F3 inset, 1px 0 0 #2392F3 inset, -1px 0 0 #2392F3 inset, 0 0 4px rgba(35,146,243,0.5);
+	    outline: none;
+	    background: #FFF;
+	}
+
+	.add_left{
+		float: left;
+		width:45%;
+		border-right: 1px solid gray;
+		padding-right: 5%;
+	}
+	.add_right{
+		float: right;
+		width:45%;
+		border-left: -1px solid gray; 
+	}
+
+}

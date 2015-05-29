@@ -1,0 +1,13 @@
+{
+  "short_name": "Lists",
+  "name": "List Tracker",
+  "version": "0.1",
+  "manifest_version": 2,
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  },
+  "icons": { "36": "stylesheets/list_check-36-icon.png", "144": "stylesheets/list_check-144-icon.png" }
+  
+}

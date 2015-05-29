@@ -1,0 +1,82 @@
+<style>
+.click_div{
+	width: 160px;
+	height: 302px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 10px;
+}
+
+.choice_art_container {
+	width:160px;
+	height:245px;
+	margin: auto;
+	position: relative;
+	background-color: #e5e5e5;
+}
+.hidden_p{
+	display:none;
+}
+img.art {
+	max-width: 100%;
+	max-height: 100%;
+	vertical-align: middle;
+}
+
+.choices{
+	position:absolute;
+	
+}
+
+.add_list_narrow .click_div{
+	width: 85px;
+	height: 146px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 10px;
+}
+
+.add_list_narrow .choice_art_container{
+	width: 85px;
+	height: 121px;
+
+}
+
+.add_list_narrow .choice_info{
+	overflow: hidden;
+}
+
+.add_list_narrow .choice_info p{
+	white-space: nowrap;
+	margin:0;
+	margin-left: 3px;
+	margin-right: 3px;
+	font-size: 10px;
+	height: 10px;
+}
+
+.add_list_narrow .choices{
+	position: relative;
+	overflow-y: auto;
+	overflow-x: hidden;
+	width:100%;
+}
+</style>
+<div class="choices modal" horizontal center-justified layout wrap flex>
+	{% for book in data["items"] %}
+	<paper-shadow z='1' class="click_div" onclick="getItemDetails(this, '{{ list_type }}')">
+		<p class="hidden_p item_id">{{ book['id'] }}</p>
+
+		<p class="hidden_p find_release_date">{{ book['volumeInfo']['publishedDate'] }}</p>
+		<p class="hidden_p find_publisher">{{ book['volumeInfo']['publisher'] }}</p>
+		<p class="hidden_p find_description">{{ book['volumeInfo']['description'] }}</p>
+		<div class="choice_art_container" vertical center-justified layout>
+			<img class="art" src="{{ BOOKS_ART_URL_START }}{{ book['id'] }}{{ BOOKS_ART_URL_TAIL }}" onerror="if (this.src != 'http://photos.imageevent.com/imagesbykim/pda/galleriesbycategory/bookcovers/640%20Book%20cover%20Burgundy%20ornate%20frame.jpg') this.src = 'http://photos.imageevent.com/imagesbykim/pda/galleriesbycategory/bookcovers/640%20Book%20cover%20Burgundy%20ornate%20frame.jpg';">
+		</div>
+		<div class="choice_info">
+			<p class="find_title">{{ book['volumeInfo']['title'] }}</p>
+			<p class="find_author">{% for author in book['volumeInfo']['authors']%}{{ author }} {% endfor %}</p>
+		</div>
+	</paper-shadow>
+	{% endfor %}
+</div>

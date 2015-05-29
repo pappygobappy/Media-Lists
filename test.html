@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- 1. Load webcomponents.min.js for polyfill support. -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-cappable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/bower_components/webcomponentsjs/webcomponents.js"></script>
+
+    <!-- 2. Use an HTML Import to bring in the element. -->
+    <link rel="import" href="elements/elements.html">
+    <link rel="stylesheet" href="/stylesheets/app.css">
+    <link type="text/css" rel="stylesheet" href="/stylesheets/home.css" />
+    <link rel="manifest" href="/scripts/manifest.json">
+    <link rel="shortcut icon" href="favicon.ico">
+  </head>
+  <body fullbleed layout vertical >
+    <!-- 3. Declare the element. Configure using its attributes.
+    Replace '//example.com/json' with valid json file -->
+    <core-drawer-panel id="drawerPanel" class="core-transition" style="display:none">
+      <core-header-panel drawer> 
+        <core-toolbar>{{ user }}</core-toolbar>
+        <core-menu>
+          <core-item label="{{ url_linktext }}"><a href='{{ url }}'></a></core-item>
+          <core-item label="Two"></core-item>
+        </core-menu>
+      </core-header-panel>
+      <core-scroll-header-panel main>
+        <core-toolbar class="medium">
+          <paper-icon-button core-drawer-toggle icon="menu"></paper-icon-button>
+          <div class="title">Lists</div>
+          <span flex></span>
+          <paper-icon-button class="add_list" icon="add"></paper-icon-button>
+        </core-toolbar>
+
+        <div class="content core-transition">
+          {% for l in lists %}
+          <paper-shadow z="1" class="list_card">
+          <div id="title">{{ l.title }}</div>
+          <div class="{{ l.title.replace(" ","") }} list_container home">
+            {% for li in l.listItems %}
+              <div class="list_item">
+                <p class="hidden_p item_id">{{ db.get(li).key().id() }}</p>
+                <div class="art_container">
+                  <span class="buffer"></span>
+                  <img class="art" src="{{ db.get(li).imageUrl }}">
+                </div>
+                <!--<p>{{ db.get(li).description }}</p>-->
+              
+              </div>
+            {% endfor %}
+          </div>
+          <paper-ripple fit></paper-ripple>
+        </paper-shadow>
+          {% endfor %}
+          <paper-action-dialog id="add_list_dialog" transition="core-transition-center" style="height: 470px; width: 50%">
+            <h1>Add List</h1>
+            <paper-input-decorator label="List Name" floatingLabel>
+                <input is="core-input" class="list_title">
+            </paper-input-decorator>
+            <input class="list_type" hidden>
+            <paper-dropdown-menu label="List Type" >
+                <paper-dropdown class="dropdown">
+                    <core-menu class="menu">
+                        <paper-item><core-icon icon="book"></core-icon>&nbsp;<div class="type_item">Books</div></paper-item>
+                        <paper-item><core-icon icon="av:games"></core-icon>&nbsp;<div class="type_item">Games</div></paper-item>
+                        <paper-item><core-icon icon="maps:local-movies"></core-icon>&nbsp;<div class="type_item">Movies</div></paper-item>
+                    </core-menu>
+                </paper-dropdown>
+            </paper-dropdown-menu>
+            <paper-button dismissive role="button">Cancel</paper-button>
+            <paper-button affirmative autofocus role="button" class="put_list">Add</paper-button>
+          </paper-action-dialog>
+        </div>
+        <div class="add_list_narrow core-transition" id="add_list_narrow" transition="core-transition-center" hidden style="height: 100%">
+          <h1>Add List</h1>
+            <paper-input-decorator error="Please enter a List Name" label="List Name" floatingLabel>
+                <input is="core-input" required class="list_title">
+            </paper-input-decorator>
+            <input class="list_type" hidden>
+            <paper-dropdown-menu label="List Type" >
+                <paper-dropdown class="dropdown">
+                    <core-menu class="menu">
+                        <paper-item><core-icon icon="book"></core-icon>&nbsp;<div class="type_item">Books</div></paper-item>
+                        <paper-item><core-icon icon="av:games"></core-icon>&nbsp;<div class="type_item">Games</div></paper-item>
+                        <paper-item><core-icon icon="maps:local-movies"></core-icon>&nbsp;<div class="type_item">Movies</div></paper-item>
+                    </core-menu>
+                </paper-dropdown>
+            </paper-dropdown-menu>
+            <br/>
+            <paper-button affirmative autofocus role="button" class="put_list">Add</paper-button>
+        </div>
+      </core-header-panel>
+    </core-drawer-panel>
+    <script src="/scripts/color-thief.js"></script>
+    <script src="/scripts/app.js"></script>
+  </body>
+</html>

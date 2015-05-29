@@ -1,0 +1,41 @@
+<link rel="import" href="../components/bower_components/polymer/polymer.html">
+
+<polymer-element name="list-item-card" noscript>
+  <template>
+    <style>
+    :host {
+      display: block;
+      position: relative;
+      background-color: white;
+      padding: 20px;
+      width: 100%;
+      font-size: 1.2rem;
+      font-weight: 300;
+    }
+    .card-header {
+      margin-bottom: 10px;
+    }
+    </style>
+    <div class="card-header" layout horizontal center>
+	  <paper-shadow z="1" class="list_item">
+              <div >
+                
+                <p class="hidden_p item_id">{{ db.get(li).key().id() }}</p>
+                <div class="art_container">
+                  <span class="buffer"></span>
+                  <img class="art" src="{{ db.get(li).imageUrl }}">
+                </div>
+                <div class="list_item_info">
+                <p class="item_title">{{ db.get(li).title }}</p>
+                <p class="item_dates">Start: {{ db.get(li).startDate }}<br/>Finish: {{ db.get(li).finishDate }}</p>
+                </div>
+                <!--<p>{{ db.get(li).description }}</p>-->
+              
+              </div>
+              </paper-shadow>
+	</div>
+  </template>
+  <script>
+  Polymer({});
+  </script>
+</polymer-element>

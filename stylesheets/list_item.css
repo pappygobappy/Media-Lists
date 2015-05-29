@@ -1,0 +1,22 @@
+.list_item{
+	margin: 10px auto;
+	height: 150px;
+	width: 50%;
+	background-color: white;
+	box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+	border: 1px solid #ccc;
+	border-radius: 0px;
+	padding-left: 10px;
+	padding-right: 10px;
+	-webkit-transition: box-shadow 0.1s linear, height 0.1s linear, width 0.1s linear;
+    -moz-transition: box-shadow 0.1s linear, height 0.1s linear, width 0.1s linear;
+    -ms-transition: box-shadow 0.1s linear, height 0.1s linear, width 0.1s linear;
+    -o-transition: box-shadow 0.1s linear, height 0.1s linear, width 0.1s linear;
+	transition: box-shadow 0.1s linear, height 0.1s linear, width 0.1s linear;
+}
+
+.list_item:hover{
+	box-shadow: 3px 7px 5px rgba(0,0,0,0.3);
+	height: 155px;
+	width: 51%;
+}

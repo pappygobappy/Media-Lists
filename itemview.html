@@ -1,0 +1,26 @@
+<div class="content" style="max-width: 850px; margin: 0 auto">
+	<div style="display:inline-block; float:left; margin:5px;" class='art_shadow'>
+	  <div class="art_container" vertical center-justified layout style="background-color: transparent;">
+	  	<paper-shadow z='1'>
+	        <img class="add art" src='{{ item.imageUrl }}'>
+	    </paper-shadow>
+	  </div>
+	</div>
+	<div class="item_view_info" style="display: inline-block;">
+		<h1 class="item_view_title">{{ item.title }}</h1>
+		{% if listType == 'books'%}
+		<p class="item_view_author">{{ item.author }}</p>
+		{% endif %}
+		{% if listType != 'movies'%}
+		<p class="item_view_publisher">{{ item.publisher }}</p>
+		<p class="item_view_start_date">Started {{ item.startDate }}</p>
+		{% endif %}
+		<p class="item_view_end_date">Finished {{ item.finishDate}}</p>
+		<paper-button  class="item_finish_button" raised style='background: blue; color:white;' onclick="finishItem('{{ item.key().id() }}')"><core-icon icon="check"></core-icon>&nbsp;Finish</paper-button>
+	</div>
+	<div style="display:block;">
+		<h1>Description</h1>
+		<p>{{ item.description }}</p>
+	</div>
+</div>
+

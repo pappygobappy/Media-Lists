@@ -1,0 +1,40 @@
+<div class="view modal">
+	<div class="view_art_container_small">
+		<div class="view_art_background" style="background-image: url('{{ book.imageUrl }}');"></div>
+	</div>
+	<p class="hidden_p item_id">{{ book.key().id() }}</p>
+	<div class="view_info">
+		<div class="title_info">
+			<span class="back_button" onclick="closeModal()">&#9664;</span>
+			<h1 class="view_title">{{ book.title }}</h1>
+			<h1 class="view_author subHeading">{{ book.author }}</h1>
+		</div>
+		<div class="view_bottom">
+			<div class="sub_info">
+				{% if book.startDate != '' %}
+				<h2 class="view_label subHeading">Start: </h2>
+				<h2 class="view_start_date view_label ">{{ book.startDate }}</h2>
+				<br/>
+				{% endif %}
+				<h2 class="view_label subHeading">Finish: </h2>
+				<h2 class="view_start_date view_label">{{ book.finishDate }}</h2>
+				<br/>
+				<h2 class="view_label subHeading">Published Date: </h2>
+				<h2 class="view_release_date view_label">{{ book.publishedDate }}</h2>
+				<br/>
+				<h2 class="view_label subHeading">Publisher: </h2>
+				<h2 class="view_publisher view_label">{{ book.publisher }}</h2>
+				<br/>
+				<p class="view_description">{{ book.description|safe }}</p>
+			</div>
+			{% if book.finishDate == '' %}
+		  	<div class='finish_button' onclick='completeItem(this)'>
+		    	<p class='finish_button'>Finish</p>
+		  	</div>
+		  	{% endif %}
+	  	</div>
+	</div>
+  	<div class="view_art_container">
+		<img class="view_art" src="{{ book.imageUrl }}">
+	</div>
+</div>

@@ -1,0 +1,19 @@
+{
+  "name": "Listsv2",
+  "version": "0.5",
+  "description": "ListyLists",
+  "authors": [
+    "pdunleavy"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#0.5"
+  }
+}

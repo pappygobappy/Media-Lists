@@ -1,0 +1,49 @@
+<span class="back_button" onclick="closeModal()">&#9664;</span>
+<div class="addNew modal">
+	<div style="width:100%; display:block;">
+		<div class="add_left">
+			<label>Title</label>
+			<input class="add_title">
+			<br/>
+			{% if list_type == 'books' %}
+			<label>Author</label>
+			<input class="add_author">
+			<br/>
+			{% endif %}
+			{% if list_type == 'games' %}
+			<label>Platform</label>
+			<input class="add_platform">
+			<br/>
+			{% endif %}
+			<label>Start Date</label>
+			<input type="date" class="add_start_date">
+			<br/>
+			<label>End Date</label>
+			<input type="date" class="add_end_date">
+		</div>
+		<div class="add_right">
+			<label>Release Date</label>
+			<input class="add_release_date">
+			<br/>
+			<label>Publisher</label>
+			<input class="add_publisher">
+			<br/>
+			{% if list_type == 'games' %}
+			<label>Developer</label>
+			<input class="add_developer">
+			{% endif %}
+			<input class="add_id hidden_p">
+		</div>
+	</div>
+	<br/>
+	<div class="des_con">
+		<label>Image Url</label>
+		<input class="add_image_url">
+		<br/>
+		<label>Description</label>
+		<textarea class="add_description"></textarea>
+	</div>
+	<div onclick="findItem()">Search</div>
+	<div onclick="putItem()">Submit</div>
+	<div id="results"></div>
+</div>

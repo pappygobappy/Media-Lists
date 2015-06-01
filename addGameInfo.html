@@ -1,0 +1,45 @@
+{% for game in tree.iter('Game') %}
+<paper-shadow z='1' style="display:inline-block" class='art_shadow'>
+  <div class="art_container" vertical center-justified layout>
+        <img class="art" src="http://thegamesdb.net/banners/{{ game.find('Images').find('boxart[@side="front"]').text }}">
+  </div>
+</paper-shadow>
+<br/>
+<paper-input-decorator label="Image Url" class="add_image_decorator" floatingLabel>
+  <textarea class="add_image_url autogrow">http://thegamesdb.net/banners/{{ game.find('Images').find('boxart[@side="front"]').text }}</textarea>
+</paper-input-decorator>
+<br/>
+<paper-input-decorator label="Title" class="add_title_decorator" floatingLabel>
+  <textarea class="add_title autogrow" onkeyup='textAreaAdjust(this)' style="overflow:hidden">{{ game.find('GameTitle').text }}</textarea>
+</paper-input-decorator>
+<br/>
+<paper-input label="Platform" class="add_platform" floatingLabel value="{{ game.find('Platform').text }}">
+</paper-input>
+<br/>
+<paper-input-decorator label="Start Date" class='add_start_date_decorator' floatingLabel>
+  <input type="date" is='core-input' class='add_start_date' value="2015-01-26">
+</paper-input-decorator>
+<br/>
+<paper-input-decorator label="End Date" class='add_end_date_decorator' floatingLabel>
+  <input type="date" is='core-input' class='add_end_date' >
+</paper-input-decorator>
+
+
+<paper-input label="Release Date" class="add_release_date" floatingLabel value="{{ game.find('ReleaseDate').text }}">
+</paper-input>
+<br/>
+<paper-input label="Publisher" class="add_publisher" floatingLabel value="{{ game.find('Publisher').text }}">
+</paper-input>
+<br/>
+<paper-input label="Developer" class="add_developer" floatingLabel style="width:100%" value="{{ game.find('Developer').text }}">
+</paper-input>
+<input class="add_id hidden_p">
+
+
+<br/>
+
+<paper-input-decorator floatingLabel label="Description" class="add_description_decorator">
+  <textarea class="add_description" style="height: 100px;">{{ game.find('Overview').text }}</textarea>
+</paper-input-decorator>
+<paper-button autofocus role="button" class="add_item" onclick="putItem(this, '{{ list_type }}', '{{ listToView.key().id() }}')">Add</paper-button>
+{% endfor %}

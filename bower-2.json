@@ -1,0 +1,32 @@
+{
+  "name": "Listsv2",
+  "version": "0.0.0",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.5.2",
+    "core-toolbar": "Polymer/core-toolbar#~0.5.2",
+    "paper-icon-button": "Polymer/paper-icon-button#~0.5.2",
+    "paper-progress": "Polymer/paper-progress#~0.5.2",
+    "platform": "Polymer/platform#~0.4.2",
+    "core-elements": "Polymer/core-elements#~0.5.2",
+    "paper-fab": "Polymer/paper-fab#~0.5.2",
+    "paper-tabs": "Polymer/paper-tabs#~0.5.2",
+    "paper-dialog": "Polymer/paper-dialog#~0.5.3",
+    "paper-input": "Polymer/paper-input#~0.5.3",
+    "paper-dropdown-menu": "Polymer/paper-dropdown-menu#~0.5.3",
+    "paper-ripple": "Polymer/paper-ripple#~0.5.3",
+    "paper-spinner": "Polymer/paper-spinner#~0.5.4",
+    "core-animated-pages": "Polymer/core-animated-pages#~0.5.4",
+    "paper-date-picker": "~0.1.5"
+  },
+  "resolutions": {
+    "font-roboto": "master"
+  }
+}
